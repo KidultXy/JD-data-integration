@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>京东信息集成</title>
+
+    <!-- Favicons -->
+    <link href="../static/assets/img/favicon.ico" rel="icon">
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i,900" rel="stylesheet">
+    <link rel="stylesheet" href="../static/assets/font/iconfont.css">
+    <!-- Vendor CSS Files -->
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+    <!-- Vendor Main JS File -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+     <!-- Vendor Map JS File -->
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/maps/china.js"></script>
+</head>
+
+
+<!-- ======= Header菜单  ======= -->
+<header id="header">
+    <!-- 返回首页 -->
+    <div class="col-1 float-left">
+        <a href="/view">
+             <i class="iconfont icon-home"  style="font-size: 40px ; padding-left: 10px"></i>
+        </a>
+    </div>
+    <h1>Dash Board</h1>
+
+</header>
+<!-- End Header -->
+
+
+
+<body>
+
+    <div id="products" style="float: left">
+        <!-- 看板菜单抽屉 -->
+        <div class="shell">
+            <a href="/search" class="box"><i class="iconfont icon-icon-test"></i><span>All Info</span></a>
+            <a href="#" class="box" id="map-hot"><i class="iconfont  icon-icon-test11"></i><span>distribution</span></a>
+            <a href="#" class="box" id="brand"><i class="iconfont icon-icon-test5"></i><span>brand</span></a>
+            <a href="#" class="box" id="info-details"><i class="iconfont icon-icon-test2"></i><span>details</span></a>
+            <a  class="box" id="price" style="color: black"><i class="iconfont icon-zhangdan-xianxing"></i><span>price</span></a>
+            <a href="/search" class="box" id="comment"><i class="iconfont icon-icon-test1"></i><span> Comments</span></a>
+            <a href="/result" class="box" ><i class="iconfont icon-zhexiantu"></i><span>Data Board</span></a>
+            <a href="/search" class="box"><i class="iconfont  icon-shangyiyehoutuifanhui-xianxingyuankuang"></i><span>all products</span></a>
+        </div>
+    </div>
+    <div class="shadow" style="width:1500px; height:500px;margin-left: 100px;margin-bottom: 50px;">
+        <!-- 电脑分布地区热力地图-->
+        <div id="map_hot" class="chart-container" style="width:900px; height:500px;padding-left: 100px;float: left"></div>
+        <!-- 电脑分布地区象形柱图-->
+        <div id="pic_bar" class="chart-container" style="width:500px; height:500px;float: left"></div>
+    </div>
+    <!-- 电脑品牌分布散点图-->
+    <div id="scatter_map" class="chart-container shadow" style="width:1500px; height:500px;padding-top:60px;margin-left: 100px;margin-bottom:50px;float: left"></div>
+    <!-- 电脑具体参数饼状图-->
+    <div class="shadow" style="height: 1000px;width: 1500px;margin-left: 100px;margin-bottom: 50px;float: left">
+        <div id="pie" class="chart-container" style="width:700px; height:400px;padding-top:50px;margin-left:80px;margin-bottom:50px;float: left"></div>
+        <div id="pie2" class="chart-container" style="width:700px; height:400px;padding-top:50px;margin-left: 10px;margin-bottom:50px;float: left"></div>
+        <div id="pie3" class="chart-container" style="width:700px; height:400px;margin-left:80px;float: left"></div>
+        <div id="pie4" class="chart-container" style="width:700px; height:400px;margin-left: 10px;float: left"></div>
+    </div>
+    <div id="box-plot-div" class="shadow" style="height: 500px;width: 1500px;margin-left: 100px;margin-bottom: 50px;float: left">
+        <div id="boxplot" class="chart-container" style="width:700px; height:400px;padding-top:50px;margin-left:80px;margin-bottom:50px;float: left">
+        <div id="bubble_plot" class="chart-container" style="width:500px; height:500px;float: left"></div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    {#销售地信息#}
+    sale_loc={{ datalist|tojson }};
+    sale_dict=convertData(sale_loc);
+    {#品牌分布信息#}
+    brand_info={{ brand_info|tojson }};
+    brand_dic=convertData(brand_info);
+    {#厚度信息#}
+    thick_info={{ thick_info|tojson }};
+    thick_dic=convertData(thick_info);
+    {#刷新率信息#}
+    rate_info={{ rate_info|tojson }};
+    rate_dic=convertData(rate_info);
+    {#内存信息#}
+    memory_info={{ memory_info|tojson }};
+    memory_dic=convertData(memory_info);
+    {#显卡信息#}
+    gracard_info={{ gracard_info|tojson }};
+    gracard_dic=convertData(gracard_info);
+
+    {#array - dict转换#}
+    function convertData(rawDataArray)
+    {
+     let obj={};
+     for(let key in rawDataArray)
+     {
+         obj[key]  = rawDataArray[key];
+     }
+     let newObj = Object.keys(obj).map(val =>({
+         name: obj[val][0],
+         value: obj[val][1]
+     }) );
+     return newObj
+    }
+    {#销售地区热力地图#}
+    $("#map-hot").click(function (e){
+    e.preventDefault();
+    sale_loc_map(sale_dict);
+    pic_bar(sale_loc);
+    });
+    {#价格箱型图-气泡图#}
+    $("#price").click(function (e){
+        $("#box-plot-div").empty();
+        a='<img src="../static/assets/img/chart/price-boxplot.png" style="margin-left:80px;margin-top: 30px">'
+        a+='<img src="../static/assets/img/chart/bubble.png" style="padding-left: 50px">'
+        $("#box-plot-div").append(a);
+    });
+    {#参数饼状图#}
+    $("#info-details").click(function (e){
+        e.preventDefault();
+        pie(thick_dic,thick_info,'pie','参数-厚度')
+        pie(rate_dic,rate_info,'pie2','参数-屏幕刷新率')
+        pie(gracard_dic,gracard_info,'pie3','参数-显卡类型')
+        pie(memory_dic,memory_info,'pie4','参数-内存')
+    });
+    {#品牌分布图#}
+    $("#brand").click(function (e){
+        e.preventDefault();
+        scatter_map(brand_info,brand_dic);
+    });
+
+    {#热力图参数#}
+    function sale_loc_map(loc_data){
+
+        var option_map_hot = {
+
+            "series": [
+                {
+                    "name":"京东电脑",
+                    "type": "map",
+                    "label": {"show": true},
+                    "mapType": "china",
+                    "data":loc_data ,
+                }
+            ],
+            "legend": [
+                {"show": true,}
+            ],
+            "tooltip": {"show": true},
+            "title": [
+                {
+                    "text": "销售地区分布图",
+                    "padding": 5,
+                    "itemGap": 10
+                }
+            ],
+            "visualMap": {
+                "show": true,
+                "type": "continuous",
+                "min": 0,
+                "max": 100,
+                "inRange": {
+                    "color": [
+                        "#50a3ba",
+                        "#eac763",
+                        "#d94e5d"
+                    ]
+                },
+                "calculable": true,
+                "inverse": false,
+                "splitNumber": 5,
+                "orient": "vertical",
+                "showLabel": true,
+                "itemWidth": 20,
+                "itemHeight": 140,
+                "borderWidth": 0
+            }
+        };
+         let chart_map_hot = echarts.init(
+            document.getElementById('map_hot'), 'white', {renderer: 'canvas'});
+         chart_map_hot.setOption(option_map_hot);
+    }
+
+    {#饼状图参数#}
+    function pie(data,label,pie_id,title) {
+        let pie_label=[]
+        for (let l of label){
+            pie_label.push(l[0]);
+        }
+        console.log(pie_label)
+        var option_pie = {
+            "series": [
+                {
+                    "type": "pie",
+                    "clockwise": true,
+                    "data":data ,
+                    "radius": [
+                        "40%",
+                        "75%"
+                    ],
+
+                    "label": {"show": true},
+                    "rippleEffect": {"show": true,}
+                }
+            ],
+            "legend": [
+                {
+
+                    "data":pie_label,
+                    "selected": {},
+                    "show": true,
+                    "left": "2%",
+                    "top": "15%",
+                    "orient": "vertical",
+
+                }
+            ],
+            "tooltip": {
+                "show": true,
+                "trigger": "item",
+                "triggerOn": "mousemove|click",
+                "axisPointer": {
+                    "type": "line"
+                },
+                "showContent": true,
+                "alwaysShowContent": false,
+            },
+            "title": [
+                {
+                    "text": title,
+                    "padding": 5,
+                    "itemGap": 10
+                }
+            ]
+    };
+         var chart_pie = echarts.init(
+             document.getElementById(pie_id), 'white', {renderer: 'canvas'});
+            chart_pie.setOption(option_pie);
+    }
+    {#象形图参数#}
+    function pic_bar(pic_data) {
+        var x=[]
+        var y=[]
+        for (var data of pic_data){
+            x.push(data[0]);
+            y.push(data[1]);
+        }
+         var option_pic_bar = {
+        "series": [
+            {
+                "type": "pictorialBar",
+                "symbol": "roundRect",
+                "symbolSize": 18,
+                "symbolOffset": [
+                    0,
+                    0
+                ],
+                "symbolRepeat": "fixed",
+                "symbolClip": true,
+                "data":y,
+                "barCategoryGap": "20%",
+                "label": {
+                    "show": false,
+                    "position": "top",
+                    "margin": 8
+                }
+            }
+        ],
+        "legend": [{"show": true,}],
+        "tooltip": {"show": true,},
+        "xAxis": [{"show": false,}],
+        "yAxis": [
+            {
+                "show": true,
+                "scale": false,
+                "nameLocation": "end",
+                "nameGap": 15,
+                "gridIndex": 0,
+                "axisLine": {
+                    "show": true,
+                    "onZero": true,
+                    "onZeroAxisIndex": 0,
+                    "lineStyle": {
+                        "show": true,
+                        "width": 1,
+                        "opacity": 0,
+                        "curveness": 0,
+                        "type": "solid"
+                    }
+                },
+                "axisTick": {
+                    "show": false,
+                    "alignWithLabel": false,
+                    "inside": false
+                },
+                "inverse": false,
+
+                "data":x,
+            }
+        ]
+    };
+         var chart_pic_bar = echarts.init(
+                document.getElementById('pic_bar'), 'white', {renderer: 'canvas'});
+         chart_pic_bar.setOption(option_pic_bar);
+    }
+
+    {#散点图参数#}
+    function scatter_map(label,xdata){
+        let xlabel=[];
+        for (var data of label){
+            console.log(data[0])
+            xlabel.push(data[0]);
+        }
+        var option_scatter_map = {
+            "series": [
+                {
+                    "type": "scatter",
+                    "name": "京东",
+                    "symbolSize": 10,
+                    "data": xdata,
+                    "label": {
+                        "show": true,
+                        "position": "right",
+                        "margin": 8
+                    }
+                }
+            ],
+            "legend": [
+                {
+                    "data": [
+                        "京东"
+                    ],
+                    "selected": {
+                        "京东": true
+                    },
+                    "show": true,
+                    "padding": 5,
+                    "itemGap": 10,
+                    "itemWidth": 25,
+                    "itemHeight": 14
+                }
+            ],
+            "tooltip": {
+                "show": true,
+            },
+            "xAxis": [
+                {
+                    "show": true,
+                        "scale": false,
+                        "nameLocation": "end",
+                        "nameGap": 15,
+                        "gridIndex": 0,
+                        "axisLabel": {
+                            "show": true,
+                            "position": "top",
+                            "rotate": -15,
+                            "margin": 8
+                        },
+
+                    "data": xlabel,
+                }
+            ],
+            "yAxis": [
+                {"show": true}
+            ],
+            "title": [
+                {
+                    "text": "电脑品牌分布散点图",
+                    "padding": 5,
+                    "itemGap": 10
+                }
+            ],
+            "visualMap": {
+                "show": true,
+                "type": "continuous",
+                "min": 20,
+                "max": 150,
+                "inRange": {
+                    "symbolSize": [
+                        20,
+                        50
+                    ]
+                },
+                "calculable": true
+            }
+        };
+         var chart_scatter_map = echarts.init(
+                document.getElementById('scatter_map'), 'white', {renderer: 'canvas'});
+        chart_scatter_map.setOption(option_scatter_map);
+    }
+
+
+
+</script>
+

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title>京东信息集成</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../static/assets/img/favicon.ico" rel="icon">
+
+
+    <!-- Vendor CSS Files -->
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../static/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/assets/font/iconfont.css">
+    <!-- Vendor swiper Js File -->
+    <script src="../static/assets/js/swiper.js"></script>
+    <script src="../static/assets/js/jquery.min.js"></script>
+</head>
+
+<body>
+
+
+
+  <!-- ======= Header菜单  ======= -->
+  <header id="header">
+    <div class="container">
+       <nav class="nav-menu  d-none d-lg-block">
+        <ul class="nav justify-content-center">
+            <a href="/view">
+                <i class="iconfont icon-shouye"  style="font-size: 30px"></i>
+            </a>
+            <a href="/search">
+                <i class="iconfont icon-sousuo-xianxing"  style="font-size: 30px"></i>
+            </a>
+            <a href="/result">
+                <i class="iconfont icon-zhexiantu "  style="font-size: 30px"></i>
+            </a>
+            <a href="/team">
+                <i class="iconfont icon-shezhi"  style="font-size: 30px"></i>
+            </a>
+            <a href="/login">
+                <i class="iconfont icon-shangyiyehoutuifanhui-xianxingyuankuang"  style="font-size: 30px"></i>
+            </a>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+    </div>
+  </header><!-- End Header -->
+
+<div class="out">
+      <div class="inner">
+        <div class="img">
+            <a href="/result/10049919047758">
+                <img src="../static/assets/img/lb/lb1.jpg" alt="" />
+            </a>
+        </div>
+        <div class="img">
+          <img src="../static/assets/img/lb/lb2.jpg" alt="" />
+        </div>
+        <div class="img">
+          <img src="../static/assets/img/lb/lb3.jpg" alt="" />
+        </div>
+        <div class="img">
+          <img src="../static/assets/img/lb/lb4.jpg" alt="" />
+        </div>
+        <div class="img">
+          <img src="../static/assets/img/lb/lb5.jpg" alt="" />
+        </div>
+      </div>
+      <div class="arrow">
+        <i class="fas fa-chevron-left left"></i>
+        <i class="fas fa-chevron-right right"></i>
+      </div>
+      <div class="button">
+        <p class="sp"></p>
+        <p class="sp"></p>
+        <p class="sp"></p>
+        <p class="sp"></p>
+        <p class="sp"></p>
+<!--        <p></p>-->
+<!--        <p></p>-->
+      </div>
+    </div>
+  <!-- =======  全部商品信息 ======= -->
+    <div class="product-content  bar1">
+
+        <div class="section-title">
+          <h2>全部商品信息</h2>
+        </div>
+
+    <form method="post" action="{{url_for('search')}}">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" id="search-content" name="search-content" placeholder="Please enter keywords" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+            </div>
+        </div>
+    </form>
+
+        <div class="product-list " >
+                {% for data in basic_infos %}
+                    <div class="col-2">
+                        <div class="card">
+                            <div class="pic">
+                                <a href="/result/{{ data[1] }}">
+                                    <img src="../static/assets/jd-img/{{ data[1]}}.jpg">
+                                    <i></i>
+                                </a>
+                                <p>
+                                    <a href="/result/{{ data[1] }}">{{ data[2][0:26]}}</a>
+                                </p>
+                                <span>价格：{{ data[3]}}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+                {%if basic_infos == [] %}
+                    <h2>无结果</h2>
+                {%endif%}
+        </div>
+    </div>
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span>xy</span></strong>. All Rights Reserved
+      </div>
+
+    </div>
+
+  </footer><!-- End Footer -->
+
+
+</body>
+
+</html>
+
+
+<script>
+
+</script>
+
+

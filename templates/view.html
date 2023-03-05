@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>京东信息集成</title>
+    <meta content="" name="descriptison">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <link href="../static/assets/img/favicon.ico" rel="icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,600,600i,700,700i,900" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="../static/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/assets/font/iconfont.css">
+
+    <!-- Template Main CSS File -->
+    <link href="../static/assets/css/style.css" rel="stylesheet">
+
+    <!-- Vendor JS Files -->
+    <script src="../static/assets/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="../static/assets/js/main.js"></script>
+
+</head>
+
+<body>
+
+
+
+<!-- ======= Header菜单 ======= -->
+  <header id="header">
+
+    <div class="container">
+      <nav class="nav-menu  d-none d-lg-block">
+        <ul class="nav justify-content-center">
+
+            <a href="/view">
+                 <i class="iconfont icon-shouye"  style="font-size: 30px"></i>
+            </a>
+             <a href="/search">
+                 <i class="iconfont icon-sousuo-xianxing"  style="font-size: 30px"></i>
+            </a>
+            <a href="/result">
+                 <i class="iconfont icon-zhexiantu "  style="font-size: 30px"></i>
+            </a>
+            <a href="/team">
+                 <i class="iconfont icon-shezhi"  style="font-size: 30px"></i>
+            </a>
+             <a href="/login">
+                 <i class="iconfont icon-shangyiyehoutuifanhui-xianxingyuankuang"  style="font-size: 30px"></i>
+            </a>
+
+        </ul>
+      </nav><!-- .nav-menu -->
+    </div>
+  </header><!-- End Header -->
+
+
+  <!-- welcome界面主体 -->
+  <div class="view-shell">
+        <div class="view-image" style="background-image: url('../static/assets/img/welcome/img1.png');"></div>
+        <div class="view-heading">
+            <h1>If you're on the fence about...</h1>
+        </div>
+
+        <div class="view-text">
+            <h1>what to choose as your next computer💻</h1>
+        </div>
+
+        <div class="view-image" style="background-image: url('../static/assets/img/welcome/img2.jpeg');"></div>
+        <div class="view-heading">
+            <h1>This is the website </h1>
+        </div>
+        <div class="view-text">
+            <h1>we designed for U </h1>
+        </div>
+
+        <div class="view-image" style="background-image: url('../static/assets/img/welcome/img3.png');"></div>
+        <div class="view-heading">
+            <h1>WITH </h1>
+        </div>
+        <div class="view-text">
+            <h1>reliable data analysis 📈 & clear graphical presentation 📊</h1>
+        </div>
+
+        <div class="view-image" style="background-image: url('../static/assets/css/bg.jpg');"></div>
+        <div class="view-heading">
+            <h1>Come and Have a Go !!!</h1>
+        </div>
+    </div>
+
+
+
+
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+
+    <div class="container">
+      <div class="copyright">
+        &copy; Copyright <strong><span> xy </span></strong>. All Rights Reserved
+      </div>
+
+    </div>
+  </footer><!-- End Footer -->
+
+  <a href="#header" class="back-to-top"><i class="icofont-simple-up"></i></a>
+</body>
+
+<script>
+    {#滚动视差#}
+    const background = document.querySelector(".background")
+
+    document.addEventListener('scroll', () => {
+        const scrollY = window.scrollY
+
+        if (scrollY !== 0) {
+            background.style.backgroundPosition = `calc(50% + ${scrollY}px) calc(50% + ${scrollY}px)`
+        }else{
+            background.style.backgroundPosition = ''
+        }
+    })
+</script>
+
+</html>
