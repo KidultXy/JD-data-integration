@@ -1,7 +1,3 @@
-# 京东电脑信息采集与集成
-
-
-
 # JD Computer Information Collection and Integration
 
 Final Project for the 2022 Data Collection and Integration Course
